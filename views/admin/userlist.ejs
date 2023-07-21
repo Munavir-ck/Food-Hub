@@ -1,0 +1,64 @@
+<%- include("partials/header.ejs") -%>
+<section>
+  <div class="container">
+    <div class="">
+      <a href="/admin/add-user" class="btn btn-success my-5">Add Users</a>
+      <a href="/admin/logoutadmin" class="btn btn-success my-5">logout</a>
+      <form class="d-flex" method="post" action="/admin/searchdata">
+        <input
+          class="form-control me-2"
+          type="search"
+          name="searchdata"
+          placeholder="Search"
+          value=""
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-success btn-sm" type="submit">
+          Search
+        </button>
+      </form>
+    </div>
+    <table class="table mt-5 display table-bordered" id="usersTable">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Options</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%for (let i = 0; i < userdetails.length; i++) { %>
+        <tr>
+          <td><%- userdetails[i].name %></td>
+          <td><%- userdetails[i].email%></td>
+          <td>
+            <a
+              class="btn btn-danger"
+              onclick="makeAdmin('<%- userdetails[i]._id %>', '<%- userdetails[i].name %>')"
+              >Make Admin</a
+            >
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  function makeAdmin(userId, userName) {
+    if (confirm(`Are you sure to make ${userName} an admin?`)) {
+      $.ajax({
+        url: "/admin/make_admin/" + userId,
+        type: "POST",
+        success: function (response) {
+          console.log(response);
+        },
+        error: function (error) {
+          console.error(error);
+        },
+      });
+    }
+  }
+</script>
+<%- include("partials/footer.ejs") -%>

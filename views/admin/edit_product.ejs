@@ -1,0 +1,167 @@
+<%- include("partials/header.ejs") -%>
+
+<div class="container">
+  <form
+    id="edit_product"
+    onsubmit="editProduct(event)"
+    enctype="multipart/form-data"
+  >
+    <div class="modal-body mx-3">
+      <div class="md-form mb-5">
+        <input
+          type="text"
+          value="<%=product._id %>"
+          id="orangeForm-name"
+          class="form-control validate hidden"
+          name="id"
+        />
+        <input
+          type="text"
+          value="<%=product.title %>"
+          id="orangeForm-name"
+          class="form-control validate"
+          name="title"
+        />
+        <label data-error="wrong" data-success="right" for="orangeForm-name"
+          >Title</label
+        >
+      </div>
+      <div class="md-form mb-2">
+        <input
+          type="text"
+          value="<%=product.price %>"
+          id="orangeForm-Price"
+          class="form-control validate"
+          name="price"
+        />
+        <label data-error="wrong" data-success="right"> Price </label>
+      </div>
+
+      <div class="md-form mb-2">
+        <select
+          id="orangeForm-Price"
+          class="mdb-select form-control validate"
+          name="category"
+          onchange="populateSubcategory(this,`<%= JSON.stringify(category) %>`)"
+        >
+          <option value="<%=product.category %>" selected>
+            <%=product.category %>
+          </option>
+
+          <% for( let i=0; i < category.length; i++ ) { %>
+
+          <option><%=category[i].title %></option>
+
+          <% } %>
+        </select>
+      </div>
+
+      <div class="md-form mb-2">
+        <select
+          id="subCategory"
+          class="mdb-select form-control validate"
+          name="foodtype"
+        >
+          <option value="<%=product.foodtype %>" selected>
+            <%=product.foodtype %>
+          </option>
+        </select>
+      </div>
+
+      <div class="md-form mb-2">
+        <input
+          type="text"
+          value="<%=product.description %>"
+          id="orangeForm-pass"
+          class="form-control validate"
+          name="description"
+        />
+        <label data-error="wrong" data-success="right" for="orangeForm-pass"
+          >Description</label
+        >
+      </div>
+      <div class="md-form mb-2">
+        <input
+          class="btn btn-primary btn-block mx-auto"
+          value="<%=product.image %>"
+          type="file"
+          name="image"
+        />
+        <label data-error="wrong" data-success="right" for="orangeForm-pass"
+          >upload image</label
+        >
+      </div>
+    </div>
+  </form>
+  <div class="d-flex justify-content-center align-items-center">
+    <button class="btn btn-deep-orange" form="edit_product" type="submit">
+      Submit
+    </button>
+  </div>
+</div>
+
+<script>
+  function populateSubcategory(selectElement, categoriesJSON) {
+    const categories = JSON.parse(categoriesJSON);
+    let selectedCategory = selectElement.value;
+    let subcategorySelect = document.getElementById("subCategory");
+    subcategorySelect.innerHTML = "";
+
+    for (let i = 0; i < categories.length; i++) {
+      console.log(categories[i].title);
+      if (selectedCategory == categories[i].title) {
+        for (let j = 0; j < categories[i].foodType.length; j++) {
+          console.log(categories[i].foodType[j], 33333333);
+
+          const optionElement = document.createElement("option");
+          optionElement.value = categories[i].foodType[j].title;
+          optionElement.textContent = categories[i].foodType[j].title;
+
+          subcategorySelect.appendChild(optionElement);
+        }
+        break;
+      }
+    }
+  }
+</script>
+
+<script>
+  function editProduct(event) {
+    console.log(4444444444);
+    event.preventDefault(); // Prevent form submission to handle it manually
+
+    // Get the form element
+    const form = document.getElementById("edit_product");
+
+    // Get the values of the form fields
+    const title = form.elements.title.value;
+    const price = form.elements.price.value;
+    const category = form.elements.category.value;
+    const foodtype = form.elements.foodtype.value;
+    const description = form.elements.description.value;
+    const id = form.elements.id.value;
+    const image = form.elements.image.files[0];
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("price", price);
+    formData.append("category", category);
+    formData.append("foodtype", foodtype);
+    formData.append("description", description);
+    formData.append("id", id);
+    formData.append("image", image);
+
+    axios
+      .patch("/admin/edit_product", formData)
+      .then((response) => {
+        if (response.data.status) {
+          window.location.href = "/admin/product_list";
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+</script>
+
+<%- include("partials/footer.ejs") -%>

@@ -1,0 +1,29 @@
+<%- include("partials/header.ejs") -%>
+
+    <div class="container mt-5">
+        <form style="max-width: 400px; margin: 0 auto;" action="/admin/add_foodtype" method="post">
+
+            <div class="form-outline mb-4">
+                <input type="text" id="form1Example1" class="form-control" name="foodtype" required />
+                <label class="form-label" for="form1Example1">FOODTYPE</label>
+            </div>
+            <div class="form-outline mb-4">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="form1Example3">Select an Category</label>
+                    </div>
+                    <select class="custom-select" id="form1Example3" name="category">
+                        <option value="" disabled selected>Select an option</option>
+                        <% for( let i=0; i < category.length; i++ ) { %>
+                            <option value=<%=category[i]._id%>><%=category[i].title%>
+                            </option>
+                            <% } %>
+                    </select>
+                </div>
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+    </div>
+
+
+    <%- include("partials/footer.ejs") -%>

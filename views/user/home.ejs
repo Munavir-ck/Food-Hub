@@ -1,0 +1,57 @@
+<%- include("partials/header.ejs") -%>
+
+
+    <section class="container mt-5 ">
+      <div class="flex-w flex-l-m filter-tope-group m-tb-10 m-3">
+            <a class="stext-106 cl6 hov1 bor3 trans-04 mx-3" href="/home">
+            All
+            </a>
+
+            <% for( let i=0; i<categories.length; i++) {%>
+            <a class="stext-106 cl6 hov1 bor3 trans-04 mx-3" href="/home?pro=<%=categories[i].title -%> ">
+                <%=categories[i].title -%>      
+            </a>
+            <% } %>           
+          </div>
+          <hr>
+         <% if (category) { %>
+            
+            <div class="flex-w flex-l-m filter-tope-group m-tb-10 m-3">
+
+                <a class="stext-106 cl6 hov1 bor3 trans-04 mx-3" href="/home?pro=<%=category.title -%>">
+                  All
+                  </a>
+               <% for( let i = 0; i <category.foodType.length; i++ ) { %>
+                <a class="stext-106 cl6 hov1 bor3 trans-04 mx-3" href="/home?pro=<%=category.title -%>&type=<%= category.foodType[i].title %> ">
+                    <%= category.foodType[i].title %>
+                    </a>
+               <% } %>
+          </div>
+          <hr>
+         <% } %>
+
+         
+          <div class="d-flex flex-row flex-wrap">
+            <% for (let i = 0; i < product.length; i++) { %>
+              <div class="col-md-3 mb-4">
+                <div class="card" style="width: 150px;">
+                  <img src="<%= product[i].image %>" class="card-img-top" alt="Skyscrapers" style="height: 150px; object-fit: contain;" />
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <%= product[i].price %>
+                    </h5>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted">
+                      <%= product[i].description %>
+                    </small>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+          </div>
+          
+          
+    </section>
+
+    <%- include("partials/footer.ejs") -%>
